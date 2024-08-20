@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package example;
+
+// コンパイルされる.pb.goファイルのパッケージ名(examplegreeting)
+option go_package = "grpc-buf-example/examplepost";
+
+message PostRequest {
+    int64 requestpostcode = 1;
+}
+
+message PostResponse {
+    string responseaddress = 1;
+}
+
+service Answer {
+    rpc SayAddress (PostRequest) returns (PostResponse);
+}

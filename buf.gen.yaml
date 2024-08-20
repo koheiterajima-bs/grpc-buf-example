@@ -1,0 +1,10 @@
+version: v1
+
+# プロトコルバッファからコード生成を行う際に使用するプラグインのリストを定義
+plugins:
+  - plugin: go # Go言語向けのコード生成を行うために使用される
+    out: gen # 生成されたコードの出力先ディレクトリを指定
+    opt: paths=source_relative # protoファイルが配置されているディレクトリ構造を保持したまま、生成されたコードがgenディレクトリに出力される
+  - plugin: go-grpc # gRPC用のGoコード生成を行うために使用される
+    out: gen
+    opt: paths=source_relative
