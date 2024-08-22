@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package myip.v1alpha1;
+
+import "myip/v1alpha1/myip.proto";
+
+// public IP履歴を返すサービス
+// public IP 確認には、https://www.ipify.org/ を利用
+service MyipService {
+  // public IP履歴作成, Role: IBPF
+  rpc Create(CreateRequest) returns (CreateResponse);
+
+  // public IP 履歴取得, Role, MyH, Biz
+  rpc Get(GetRequest) returns (GetResponse);
+}
+
+// Createメソッドのリクエストパラメータ
+message CreateRequest {
+  // 送信するメッセージ
+  IPType ip_type = 1;
+
+  // Idempotent request UUID.
+  // 参照:
+  // - API-155 https://google.aip.dev/155
+  // - request_id の実装 #110 https://github.com/plusmedi/mhv2-backends/issues/110
+  string request_id = 2;
+}
+
+// Createメソッドのレスポンスパラメータ
+message CreateResponse {
+  // 結果/sid
+  MyIP myip = 1;
+}
+
+// Getメソッドのリクエストパラメータ
+message GetRequest {
+  // リソース名。CreateRequestで返されたものを指定します。
+  string name = 1;
+}
+
+// Getメソッドのレスポンスパラメータ
+message GetResponse {
+  // 結果/sid
+  MyIP myip = 1;
+}
