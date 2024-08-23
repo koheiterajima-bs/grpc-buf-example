@@ -4,7 +4,7 @@ import (
 	"os"
 
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
-	"github.com/takekazuomi/grpczap01/pkg/myipapis/factory" // これが何をするリポジトリか？
+	"github.com/takekazuomi/grpczap01/pkg/myipapis/factory"
 	"go.uber.org/zap"
 
 	"github.com/plusmedi/go-coreg/zap/logger/v2"
@@ -26,16 +26,35 @@ func run() error {
 	// バッファリングされているログデータを全て書き出し、ロガーが保持する全てのリソースを適切にクリーンアップする。
 	defer func() { _ = log.Sync() }()
 
-	// New関数にて引数に"myipapis"を入れ、Runnerを返す(よくわからない、、)
+	// New関数にて引数に"myipapis"を入れる
 	r := runner.New("myipapis")
 
-	// for rangeで
+	// 構造体は、
+	/*
+		[]struct {
+			Name    string
+			Factory service.Factory
+		}{
+			{"myip", factory.New()},
+		}
+	*/
+	// スライスの構造体型で、スライスの要素が{"myip", factory.New()}
+
+	// forループが、
+	/*
+		{
+			if err := r.Register(sf.Name, sf.Factory); err != nil {
+				log.Error("r.Register", zap.Error(err), zap.String("name", sf.Name))
+				os.Exit(1)
+			}
+		}
+	*/
 	for _, sf := range []struct {
 		Name    string
 		Factory service.Factory
 	}{
 		{"myip", factory.New()},
-	} { // 何かしらに登録する？
+	} {
 		if err := r.Register(sf.Name, sf.Factory); err != nil {
 			log.Error("r.Register", zap.Error(err), zap.String("name", sf.Name))
 			os.Exit(1)

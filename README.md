@@ -1,3 +1,200 @@
+# メモ
+
+## 理解までの手順
+
+- 一通りコードを読み、どこのパートで何をやっているか
+  - どういった手順で読み解いていくか？
+    - proto→pb.go→main.go以外のGo→main.goかね？(それぞれフリガナ振っていく)
+- pb.goの各メソッドがどこで使われているか見る。
+
+
+- APIを追加する、そのためにはprotoに追記
+- 外部のAPI、オプションがいくつかあるので、追加してみる
+
+## とりあえず動かす
+
+- ホストで実行
+
+  ```sh
+  go run ./cmd/myipapis
+  ```
+
+- MYIPAPIS_ADDRの値がセットされていないので、セットする
+
+```sh
+export MYIPAPIS_ADDR="localhost:51051"
+```
+
+- 設定確認
+
+```sh
+echo $MYIPAPIS_ADDR
+```
+
+- grpcurlにて呼んで、リソースの作成
+
+```sh
+grpcurl -use-reflection -plaintext \
+-d '{"ip_type":"1"}' \
+${MYIPAPIS_ADDR} \
+myip.v1alpha1.MyipService.Create
+```
+
+## どこのパートで何をやっているか
+
+- ディレクトリ構造
+  - api-specs：API定義を保存するリポジトリ
+  - backends/myip：Backendのコードを保存するリポジトリ
+
+- api-specsディレクトリ
+  - myip.proto：自分のAPIを取得するためのipify APIというAPIを使っており、データ構造やそれに関連する列挙型、フィールド、タイムスタンプなどを定義するために使われる
+  - api.proto：myip.protoをインポートしている、gRPC APIのインターフェース、つまりサーバーとクライアントがどのように通信するかに関する定義に使われる
+
+.
+└── api-specs
+    ├── myipapis
+    │   ├── myip/v1alpha1
+    │   │   ├── api.proto
+    │   │   └── myip.proto
+    │   ├── buf.lock
+    │   └── buf.yaml
+    └── buf.work.yaml
+
+- backends/myipディレクトリ
+
+.
+└── backends/myip
+    ├── cmd/myipapis
+    │   └── main.go (myipapis実行ファイル)
+    ├── deployments
+    │   ├── logs
+    │   │   └── .gitignore
+    │   ├── modules
+    │   │   └── aca.bicep
+    │   ├── .envrc
+    │   ├── env.json
+    │   ├── main.bicep
+    │   ├── Makefile
+    │   └── README.md
+    ├── examples
+    │   └── README.md
+    ├── internal/pkg/poc1
+    │   ├── .envrc
+    │   ├── gitignore
+    │   ├── buf.gen.yaml
+    │   ├── Makefile
+    │   └── README.md
+    ├── pkg
+    │   ├── apis
+    │   │   ├── myip/v1alpha1
+    │   │   │   ├── api_grpc.pb.go
+    │   │   │   ├── api.pb.go
+    │   │   │   └── myip.pb.go
+    │   │   └── staticcheck.conf
+    │   ├── myip
+    │   │   ├── ipifyclient_test.go
+    │   │   ├── ipifyclient.go
+    │   │   ├── myip_test.go
+    │   │   └── myip.go
+    │   ├── myipapis
+    │   │   ├── factory
+    │   │   │   ├── factory_test.go
+    │   │   │   └── factory.go
+    │   │   ├── api.go
+    │   │   └── reporters.go
+    │   └── utils/logger
+    │       └── field.go
+    ├── scripts
+    │   └── install-deps.sh
+    ├── .editorconfig
+    ├── .envrc
+    ├── gitignore
+    ├── buf.gen.yaml
+    ├── go.mod
+    ├── go.sum
+    ├── go.work
+    ├── go.work.sum
+    ├── Makefile
+    └── staticcheck.conf
+
+
+#backends/myip
+##cmd/myipapis
+###main.go
+##deployments
+###logs
+####.gitignore
+###modules
+####aca.bicep
+###.envrc
+###env.json
+###main.bicep
+###Makefile
+###README.md
+##examples
+###README.md
+##internal/pkg/poc1
+###.envrc
+###gitignore
+###buf.gen.yaml
+###Makefile
+###README.md
+##pkg
+###apis
+####myip/v1alpha1
+#####api_grpc.pb.go
+#####api.pb.go
+#####myip.pb.go
+####staticcheck.conf
+###myip
+####ipifyclient_test.go
+####ipifyclient.go
+####myip_test.go
+####myip.go
+###myipapis
+####factory
+#####factory_test.go
+#####factory.go
+####api.go
+####reporters.go
+###utils/logger
+####field.go
+##scripts
+###install-deps.sh
+##.editorconfig
+##.envrc
+##gitignore
+##buf.gen.yaml
+##go.mod
+##go.sum
+##go.work
+##go.work.sum
+##Makefile
+##staticcheck.conf
+
+(疑問)
+- goファイルで、api_grpc.pb.go、api.pb.go、myip.pb.goらのメソッドは全く使われていない？
+- main.goで使われている関数、メソッドはほぼrunner.goのもの？
+- go runででてくるコマンドは、どこから出力されている？
+
+## 知らなかったこと
+
+- enum(列挙型)は、ProtocolBufferファイルの中で使われるデータ型で、事前定義された数値のセットを表現するために使われる。意味のある名前を持つ整数のリストとして扱われる。
+
+```proto
+enum IPType {
+	IP_TYPE_UNSPECIFIED = 0;
+	IP_TYPE_IPV4 = 1;
+	IP_TYPE_UNIVERSAL = 2;
+}
+```
+
+## 疑問点
+
+- `backends/myip/pkg/apis/myip/v1alpha1/`以下に各pbファイル格納されているが、
+  - buf.gen.yamlファイルを見ても、`backends/myip/pkg/apis/myip/v1alpha1/`以下からコンパイルした形式が見られない？
+
+
 # coreproxy 対応 grpcのツアー
 
 ## プライベートモジュール
