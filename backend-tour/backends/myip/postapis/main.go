@@ -9,6 +9,13 @@ import (
 	"net/http"
 )
 
+// APIのレスポンス全体を格納するための構造体
+type ApiResponse struct {
+	Message string `json:"message"`
+	Results []Post `json:"results"`
+	Status  int    `json:"status"`
+}
+
 // APIのレスポンスデータを格納するための構造体
 type Post struct {
 	Address1 string `json:"address1"`
@@ -36,15 +43,14 @@ func main() {
 	}
 
 	// JSONレスポンスをGoの構造体に変換
-	var posts Post
-	err = json.Unmarshal(body, &posts)
+	var apiResponse ApiResponse
+	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
 		log.Fatalf("JSONレスポンスをGoの構造体に変換失敗: %v", err)
 	}
 
 	// データを表示
-	fmt.Println(posts.Address1, posts.Address2, posts.Address3, posts.Prefcode, posts.Zipcode)
-	// for _, post := range posts {
-	// 	fmt.Println(post.Address1, post.Address2, post.Address3, post.Prefcode, post.Zipcode)
-	// }
+	for _, post := range apiResponse.Results {
+		fmt.Println(post.Address1, post.Address2, post.Address3, post.Prefcode, post.Zipcode)
+	}
 }
