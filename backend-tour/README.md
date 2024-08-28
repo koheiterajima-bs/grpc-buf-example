@@ -11,6 +11,9 @@
 - APIを追加する、そのためにはprotoに追記
 - 外部のAPI、オプションがいくつかあるので、追加してみる
 
+- myip.go or api.goでgrpcurlの出力を担っている（多分api.go,構造体にstateがあるので）
+- 郵便番号APIを使う(https://zipcloud.ibsnet.co.jp/doc/api)
+
 ## とりあえず動かす
 
 - ホストで実行
@@ -178,7 +181,6 @@ myip.v1alpha1.MyipService.Create
 - go runででてくるコマンドは、どこから出力されている？
 - よくわからんが、Registerで登録し、Runで実行する
 - zapについてみてみる->実行結果はzapで構造化したものとはわかったが、、
-- リポジトリ自体を下げる
 
 ## 知らなかったこと
 
