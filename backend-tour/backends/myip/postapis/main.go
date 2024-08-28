@@ -54,3 +54,5 @@ func main() {
 		fmt.Println(post.Address1, post.Address2, post.Address3, post.Prefcode, post.Zipcode)
 	}
 }
+
+// gRPCで作ってみる！！！！！

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "sandbox-koheiterajima/backend-tour/backends/myip/postapis/api";
+
+// 郵便番号をリクエストする
+message PostRequest {
+    int64 requestpostcode = 1;
+}
+
+// APIのレスポンスデータを格納する
+message Post {
+    string Address1 = 1;
+    string Address2 = 2;
+    string Address3 = 3;
+    string Prefcode = 4;
+    string Zipcode = 5;
+}
+
+// APIのレスポンス全体を格納する
+message PostResponse {
+    string message = 1;
+    repeated Post results = 2;
+    int64 status = 3;
+}
