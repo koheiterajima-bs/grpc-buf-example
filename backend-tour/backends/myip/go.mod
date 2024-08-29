@@ -8,6 +8,7 @@ require (
 	github.com/plusmedi/go-coreg/zap/logger/v2 v2.0.0
 	github.com/plusmedi/mhv2-backends/pkg/service v0.0.6
 	github.com/spf13/pflag v1.0.5
+	github.com/stretchr/testify v1.8.0
 	go.uber.org/zap v1.23.0
 	google.golang.org/genproto v0.0.0-20220902135211-223410557253
 	google.golang.org/grpc v1.49.0
@@ -27,7 +28,6 @@ require (
 	github.com/plusmedi/go-coreg/pflag/env/v2 v2.0.1 // indirect
 	github.com/plusmedi/go-coreg/zap/logger v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.8.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b // indirect
