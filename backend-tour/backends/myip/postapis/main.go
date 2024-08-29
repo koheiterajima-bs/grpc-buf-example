@@ -56,7 +56,7 @@ func main() {
 
 // gRPCとREST APIを混同してしまっている
 // grpc.NewClientはgRPCサーバーと通信するためのクライアントを作成するもの
-// gRPCサーバーについてよくわかっていないのでは
+// gRPCサーバーについてよくわかっていないのでは、REST APIとgRPCについて、もう一度何が違うのか、学んでみる
 // 外部で公開されているAPIでgRPCを利用しているものを探す
 
 func main() {
