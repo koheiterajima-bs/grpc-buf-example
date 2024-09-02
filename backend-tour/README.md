@@ -43,6 +43,20 @@ ${MYIPAPIS_ADDR} \
 myip.v1alpha1.MyipService.Create
 ```
 
+```sh
+grpcurl -use-reflection -plaintext \
+ -d '{"name": "myips/ここにuuidが入る"}' \
+ ${MYIPAPIS_ADDR} \
+ myip.v1alpha1.MyipService.Get
+```
+
+```sh
+grpcurl -use-reflection -plaintext \
+ -d '{"name": "myips/01j6rpsq46qq0rs649qsq3jqhz"}' \
+ ${MYIPAPIS_ADDR} \
+ myip.v1alpha1.MyipService.Delete
+```
+
 ## どこのパートで何をやっているか
 
 - ディレクトリ構造

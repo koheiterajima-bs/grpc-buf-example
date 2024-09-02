@@ -3,6 +3,7 @@ syntax = "proto3";
 package myip.v1alpha1;
 
 import "myip/v1alpha1/myip.proto";
+import "google/protobuf/empty.proto";
 
 // public IP履歴を返すサービス
 // public IP 確認には、https://www.ipify.org/ を利用
@@ -12,6 +13,11 @@ service MyipService {
 
   // public IP 履歴取得, Role, MyH, Biz
   rpc Get(GetRequest) returns (GetResponse);
+
+  // public IP履歴削除
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.method_signature) = "name";
+  };
 }
 
 // Createメソッドのリクエストパラメータ
@@ -39,7 +45,13 @@ message GetRequest {
 }
 
 // Getメソッドのレスポンスパラメータ
-message GetResponse {
+message GetResponse { 
   // 結果/sid
   MyIP myip = 1;
 }
+
+// Deleteメソッドのリクエストパラメータ
+message DeleteRequest {
+  string name = 1;
+}
+
