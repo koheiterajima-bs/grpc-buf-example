@@ -82,7 +82,9 @@ grpcurl -use-reflection -plaintext \
 .
 └── backends/myip
     ├── cmd/myipapis
-    │   └── main.go (myipapis実行ファイル)
+    │   ├── main.go
+    │   └── client
+    │       └── client.go
     ├── deployments
     │   ├── logs
     │   │   └── .gitignore
@@ -138,6 +140,8 @@ grpcurl -use-reflection -plaintext \
 #backends/myip
 ##cmd/myipapis
 ###main.go
+###client
+####client.go
 ##deployments
 ###logs
 ####.gitignore
@@ -188,6 +192,8 @@ grpcurl -use-reflection -plaintext \
 ##go.work.sum
 ##Makefile
 ##staticcheck.conf
+
+
 
 (疑問)
 - goファイルで、api_grpc.pb.go、api.pb.go、myip.pb.goらのメソッドは全く使われていない？
