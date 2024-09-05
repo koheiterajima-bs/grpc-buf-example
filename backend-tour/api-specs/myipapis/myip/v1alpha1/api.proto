@@ -18,6 +18,11 @@ service MyipService {
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
     option (google.api.method_signature) = "name";
   };
+
+  // public IP履歴一覧
+  rpc List(ListsRequest) returns (ListsResponse) {
+    option (google.api.method_signature) = "parent";
+  };
 }
 
 // Createメソッドのリクエストパラメータ
@@ -52,6 +57,25 @@ message GetResponse {
 
 // Deleteメソッドのリクエストパラメータ
 message DeleteRequest {
-  string name = 1;
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
 }
 
+// Listメソッドのリクエストパラメータ
+message ListsRequest {
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+
+  int32 page_size = 2;
+
+  string page_token = 3;
+}
+
+// Listメソッドのレスポンスパラメータ
+message ListsResponse {
+  repeated MyIP books = 1;
+
+  string next_page_token = 2;
+}
