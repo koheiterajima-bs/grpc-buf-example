@@ -51,3 +51,5 @@ func main() {
 	fmt.Printf("CreateResponse: %v\n", resCreate)
 	fmt.Printf("GetResponse: %v\n", resGet)
 }
+
+// これはcustom1.0のブランチ
