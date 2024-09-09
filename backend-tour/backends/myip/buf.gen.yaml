@@ -9,13 +9,13 @@ managed:
 plugins:
   - plugin: go
     out: pkg/apis
-    paths:
-      - api-specs/myipapis/myip/v1alpha1
+    # paths:
+    #   - api-specs/myipapis/myip/v1alpha1
     opt: paths=source_relative
   - plugin: go-grpc
     out: pkg/apis
-    paths:
-      - api-specs/myipapis/myip/v1alpha1
+    # paths:
+    #   - api-specs/myipapis/myip/v1alpha1
     opt:
       - paths=source_relative
       - require_unimplemented_servers=false

@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package myip.v1alpha1;
+
+import "proto/myip.proto";
+import "google/protobuf/empty.proto";
+
+// public IP履歴を返すサービス
+// public IP 確認には、https://www.ipify.org/ を利用
+service MyipService {
+  // public IP履歴作成, Role: IBPF
+  rpc Create(CreateRequest) returns (CreateResponse);
+
+  // public IP 履歴取得, Role, MyH, Biz
+  rpc Get(GetRequest) returns (GetResponse);
+
+  // public IP履歴削除
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.method_signature) = "name";
+  };
+
+  // public IP履歴一覧
+  rpc List(ListsRequest) returns (ListsResponse) {
+    option (google.api.method_signature) = "parent";
+  };
+}
+
+// Createメソッドのリクエストパラメータ
+message CreateRequest {
+  // 送信するメッセージ
+  IPType ip_type = 1;
+
+  // Idempotent request UUID.
+  // 参照:
+  // - API-155 https://google.aip.dev/155
+  // - request_id の実装 #110 https://github.com/plusmedi/mhv2-backends/issues/110
+  string request_id = 2;
+}
+
+// Createメソッドのレスポンスパラメータ
+message CreateResponse {
+  // 結果/sid
+  MyIP myip = 1;
+}
+
+// Getメソッドのリクエストパラメータ
+message GetRequest {
+  // リソース名。CreateRequestで返されたものを指定します。
+  string name = 1;
+}
+
+// Getメソッドのレスポンスパラメータ
+message GetResponse { 
+  // 結果/sid
+  MyIP myip = 1;
+}
+
+// Deleteメソッドのリクエストパラメータ
+message DeleteRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+// Listメソッドのリクエストパラメータ
+message ListsRequest {
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+
+  int32 page_size = 2;
+
+  string page_token = 3;
+}
+
+// Listメソッドのレスポンスパラメータ
+message ListsResponse {
+  repeated MyIP books = 1;
+
+  string next_page_token = 2;
+}

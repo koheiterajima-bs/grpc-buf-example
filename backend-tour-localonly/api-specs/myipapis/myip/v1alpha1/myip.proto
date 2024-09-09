@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package myip.v1alpha1;
+
+import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
+
+// IP の種別
+enum IPType {
+  IP_TYPE_UNSPECIFIED = 0;
+  IP_TYPE_IPV4 = 1;
+  IP_TYPE_UNIVERSAL = 2;
+}
+
+// myip リソースメッセージ
+message MyIP {
+  // myipリソース名
+  // /myips/{id}
+  string name = 1;
+
+  //　IP Type
+  IPType ip_type = 2;
+
+  // ip address
+  string ip_address = 3;
+
+  // メッセージの状態
+  // エラーを4つに集約
+  enum State {
+    STATE_UNSPECIFIED = 0;
+
+    // 処理が受け付けられた
+    STATE_ACCEPTED = 1;
+
+    // 送信エラー
+    STATE_FAILED = 2;
+  }
+
+  // 状態
+  State state = 4;
+
+  // 作成日時
+  google.protobuf.Timestamp create_time = 5;
+
+  // 更新日
+  google.protobuf.Timestamp update_time = 6;
+}
