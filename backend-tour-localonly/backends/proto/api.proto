@@ -43,3 +43,4 @@ message GetResponse {
   // 結果/sid
   MyIP myip = 1;
 }
+
